@@ -23,10 +23,14 @@
           # Function requires a derivation along with it's meta data instead
           # of a built store path provided by `nix bundle`
           package = program: system: let
-            name= (parseDrvName ( elemAt (split "/[0-9a-df-np-sv-z]{32}-" (program)) 2)).name;
-            in (pkgs system).runCommand name {} ''
-             mkdir -p $out/bin
-             ln -s ${program} $out/bin/.
+            derivation = parseDrvName (
+              elemAt (split "/" (elemAt (split "/[0-9a-df-np-sv-z]{32}-" (program)) 2)) 0
+            );
+            name = derivation.name;
+            version = if derivation.version != "" then derivation.version else "1.0";
+          in (pkgs system).runCommand name { name = name; version = version;} ''
+            mkdir -p $out/bin
+            ln -s ${program} $out/bin/.
           '';
           utils = system: (pkgs system).callPackage ./utils/rpm-deb {};
              in

@@ -90,7 +90,7 @@ in {
 
       chmod -R a+rwx ./nix
       chmod -R a+rwx ./bin
-      fpm -s dir -t rpm --name ${pkg.name} nix bin
+      fpm -s dir -t rpm --name ${pkg.name} -v ${pkg.version} nix bin
     '';
 
     installPhase = ''
@@ -147,7 +147,7 @@ in {
 
       chmod -R a+rwx ./nix
       chmod -R a+rwx ./bin
-      fpm -s dir -t deb --name ${pkg.name} nix bin
+      fpm -s dir -t deb --name ${pkg.name} -v ${pkg.version} nix bin
     '';
 
     installPhase = ''
